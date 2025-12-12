@@ -125,6 +125,8 @@ npm run dev:backend
 npm run dev:frontend
 ```
 
+**Note:** All npm scripts work cross-platform (Windows, Mac, Linux) thanks to `cross-env`.
+
 ## 🐳 Docker Deployment
 
 ### Full Stack with Docker Compose
