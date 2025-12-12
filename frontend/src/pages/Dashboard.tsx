@@ -4,6 +4,7 @@ import { GigCard } from '../components/GigCard';
 import { GigForm } from '../components/GigForm';
 import { Gig, CreateGigData } from '../types';
 import { gigsApi } from '../api/gigs';
+import { getErrorMessage } from '../utils/error';
 
 export const Dashboard = () => {
   const [gigs, setGigs] = useState<Gig[]>([]);
@@ -25,11 +26,7 @@ export const Dashboard = () => {
       setGigs(data);
       setError('');
     } catch (err: unknown) {
-      const errorMessage = 
-        err && typeof err === 'object' && 'response' in err 
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
-          : undefined;
-      setError(errorMessage || 'Failed to fetch gigs');
+      setError(getErrorMessage(err) || 'Failed to fetch gigs');
     } finally {
       setLoading(false);
     }
@@ -46,11 +43,7 @@ export const Dashboard = () => {
       setEditingGig(undefined);
       fetchGigs();
     } catch (err: unknown) {
-      const errorMessage = 
-        err && typeof err === 'object' && 'response' in err 
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
-          : undefined;
-      setError(errorMessage || 'Operation failed');
+      setError(getErrorMessage(err) || 'Operation failed');
     }
   };
 
@@ -66,11 +59,7 @@ export const Dashboard = () => {
       await gigsApi.delete(id);
       fetchGigs();
     } catch (err: unknown) {
-      const errorMessage = 
-        err && typeof err === 'object' && 'response' in err 
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
-          : undefined;
-      setError(errorMessage || 'Failed to delete gig');
+      setError(getErrorMessage(err) || 'Failed to delete gig');
     }
   };
 

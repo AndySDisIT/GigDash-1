@@ -115,16 +115,25 @@ export const updateGig = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ error: 'Gig not found' });
     }
 
+    const updateData: {
+      title?: string;
+      description?: string;
+      venue?: string;
+      date?: Date;
+      payment?: number;
+      status?: string;
+    } = {};
+
+    if (title !== undefined) updateData.title = title;
+    if (description !== undefined) updateData.description = description;
+    if (venue !== undefined) updateData.venue = venue;
+    if (date !== undefined) updateData.date = new Date(date);
+    if (payment !== undefined) updateData.payment = payment;
+    if (status !== undefined) updateData.status = status;
+
     const gig = await prisma.gig.update({
       where: { id },
-      data: {
-        title,
-        description,
-        venue,
-        date: date ? new Date(date) : undefined,
-        payment,
-        status,
-      },
+      data: updateData,
     });
 
     res.json(gig);

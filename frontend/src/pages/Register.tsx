@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
+import { getErrorMessage } from '../utils/error';
 
 interface RegisterForm {
   name: string;
@@ -29,11 +30,7 @@ export const Register = () => {
       await registerUser(data.email, data.password, data.name);
       navigate('/dashboard');
     } catch (err: unknown) {
-      const errorMessage = 
-        err && typeof err === 'object' && 'response' in err 
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
-          : undefined;
-      setError(errorMessage || 'Registration failed');
+      setError(getErrorMessage(err) || 'Registration failed');
     }
   };
 

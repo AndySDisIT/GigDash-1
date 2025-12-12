@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
+import { getErrorMessage } from '../utils/error';
 
 interface LoginForm {
   email: string;
@@ -24,11 +25,7 @@ export const Login = () => {
       await login(data.email, data.password);
       navigate('/dashboard');
     } catch (err: unknown) {
-      const errorMessage = 
-        err && typeof err === 'object' && 'response' in err 
-          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
-          : undefined;
-      setError(errorMessage || 'Login failed');
+      setError(getErrorMessage(err) || 'Login failed');
     }
   };
 
