@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(210, 40%, 98%);
+  --foreground: hsl(210, 25%, 7.8431%);
+  --card: hsl(180, 6.6667%, 97.0588%);
+  --card-foreground: hsl(210, 25%, 7.8431%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(210, 25%, 7.8431%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 25%, 7.8431%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --muted: hsl(210, 40%, 94%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --accent: hsl(210, 40%, 92%);
+  --accent-foreground: hsl(215, 16%, 47%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --ring: hsl(221, 83%, 53%);
+  --chart-1: hsl(221, 83%, 53%);
+  --chart-2: hsl(142, 76%, 36%);
+  --chart-3: hsl(45, 93%, 47%);
+  --chart-4: hsl(142, 69%, 58%);
+  --chart-5: hsl(343, 75%, 51%);
+  --sidebar: hsl(180, 6.6667%, 97.0588%);
+  --sidebar-foreground: hsl(210, 25%, 7.8431%);
+  --sidebar-primary: hsl(221, 83%, 53%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(210, 40%, 92%);
+  --sidebar-accent-foreground: hsl(215, 16%, 47%);
+  --sidebar-border: hsl(214, 32%, 91%);
+  --sidebar-ring: hsl(221, 83%, 53%);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0px 1px 2px 0px hsl(221, 83%, 53% / 0.05);
+  --shadow-xs: 0px 1px 2px 0px hsl(221, 83%, 53% / 0.05);
+  --shadow-sm: 0px 1px 2px 0px hsl(221, 83%, 53% / 0.05), 0px 1px 3px 0px hsl(221, 83%, 53% / 0.1);
+  --shadow: 0px 1px 2px 0px hsl(221, 83%, 53% / 0.05), 0px 1px 3px 0px hsl(221, 83%, 53% / 0.1);
+  --shadow-md: 0px 4px 6px -1px hsl(221, 83%, 53% / 0.1), 0px 2px 4px -2px hsl(221, 83%, 53% / 0.1);
+  --shadow-lg: 0px 10px 15px -3px hsl(221, 83%, 53% / 0.1), 0px 4px 6px -4px hsl(221, 83%, 53% / 0.1);
+  --shadow-xl: 0px 20px 25px -5px hsl(221, 83%, 53% / 0.1), 0px 8px 10px -6px hsl(221, 83%, 53% / 0.1);
+  --shadow-2xl: 0px 25px 50px -12px hsl(221, 83%, 53% / 0.25);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+.dark {
+  --background: hsl(0, 0%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(0, 0%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(221, 83%, 53%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 14.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 14.9%);
+  --muted-foreground: hsl(0, 0%, 63.9%);
+  --accent: hsl(0, 0%, 14.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 14.9%);
+  --input: hsl(0, 0%, 14.9%);
+  --ring: hsl(221, 83%, 53%);
+  --chart-1: hsl(220, 70%, 50%);
+  --chart-2: hsl(160, 60%, 45%);
+  --chart-3: hsl(30, 80%, 55%);
+  --chart-4: hsl(280, 65%, 60%);
+  --chart-5: hsl(340, 75%, 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+.font-inter {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom tab styles */
+.tab-active {
+  @apply bg-blue-500 text-white;
+}
+
+.tab-inactive {
+  @apply bg-gray-100 text-gray-600 hover:bg-gray-200;
+}
+
+/* Job card priority borders */
+.job-card-high {
+  @apply border-l-4 border-green-500;
+}
+
+.job-card-medium {
+  @apply border-l-4 border-amber-500;
+}
+
+.job-card-low {
+  @apply border-l-4 border-red-500;
+}
+
+/* Map container */
+.map-container {
+  height: 400px;
+}
+
+@media (min-width: 768px) {
+  .map-container {
+    height: 500px;
+  }
+}

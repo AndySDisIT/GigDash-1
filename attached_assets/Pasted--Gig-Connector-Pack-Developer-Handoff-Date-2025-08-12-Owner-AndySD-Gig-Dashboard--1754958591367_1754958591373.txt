@@ -1,0 +1,119 @@
+# Gig Connector Pack — Developer Handoff
+
+**Date:** 2025-08-12  
+**Owner:** AndySD (Gig Dashboard / Route Optimizer)
+
+This pack contains everything a developer needs to implement the first iteration of a **universal gig ingestion + routing + wallet** system that aggregates jobs from apps like GigSpot, iVueit, Observa, Mobee, Alt360/360 Relay, Field Agent, EasyShift, ProductTube, Veryable, Instawork, Wonolo, Bluecrew, BestMark, MarketForce, Secret Shopper, and Ipsos.
+
+---
+
+## Objectives
+
+1. **Ingest** job details from many apps via compliant, robust methods (email, share sheet, notifications, CSV, calendar).  
+2. **Normalize** into a single `JobPayload`.  
+3. **De-dupe** and store as `Gig` records.  
+4. **Score** jobs and **build routes** with time windows.  
+5. **Track** payouts in a **Wallet** and mileage/expenses for taxes.
+
+---
+
+## Architecture (MVP)
+
+- **Mobile (Expo RN)**: Import Inbox, Today Dashboard, Map/Route, Wallet.  
+- **Backend (Supabase or Node + Postgres)**: Ingest endpoints, normalization, scoring, routing proxy, reports.  
+- **Maps & Routing**: MapLibre/Mapbox + OpenRouteService/Valhalla (time-window multi-stop).  
+- **Auth**: Supabase Auth (email OTP).  
+- **Storage**: Supabase (Postgres), Storage (receipts), Edge Functions (webhooks).
+
+--
+
+## Data Model (SQL starter in `schema.sql`)
+
+- `users`  
+- `sources`  
+- `imports` (raw captures)  
+- `gigs` (normalized jobs)  
+- `routes` / `route_stops`  
+- `wallet_entries`  
+- `mileage`  
+- `expenses`  
+- `settings`
+
+---
+
+## Ingestion Paths
+
+1. **Gmail Label Parser** — read-only for a user-chosen label (e.g., `Gig Inbox`).  
+2. **Mobile Share Sheet** — user shares job text/URL into our app.  
+3. **Android Notification Listener** — structured push offers parsed on-device.  
+4. **CSV Import** — template in this pack (`sample_gigs.csv`).  
+5. **Calendar ICS** — subscribe to a device calendar for accepted shifts.  
+6. **Screenshot OCR (fallback)** — on-device OCR for stubborn sources.
+
+All paths converge into the same **`/normalize`** service that outputs `JobPayload`.
+
+---
+
+## Endpoints (see `openapi.yaml`)
+
+- `POST /ingest/email` — Gmail webhook batch → `imports`  
+- `POST /ingest/share` — mobile share payload → `imports`  
+- `POST /ingest/notify` — on-device notification → `imports`  
+- `POST /ingest/csv` — file upload → `imports`  
+- `POST /normalize` — map raw → `JobPayload` (uses `parsers/regexMap`)  
+- `POST /gigs/upsert` — create/update gig from `JobPayload`  
+- `POST /routes/build` — seed+optimize route for selected gigs  
+- `GET /wallet/summary?range=week|month` — earnings, EHR, miles, tax est.
+
+---
+
+## Scoring & Routing (MVP baseline)
+
+```
+score = w1*(pay_base + tip_expected + pay_bonus)
+      - w2*travel_minutes
+      - w3*service_minutes
+      + w4*on_time_probability
+      + w5*surge_or_scarcity
+
+eff_hourly = (pay_base + tip_expected + pay_bonus) / ((travel_minutes + service_minutes)/60.0)
+```
+
+- Routing: time-window VRP heuristic — greedy seed → local swaps → time-window repair.  
+- Return ordered stops with ETAs and feasibility flags.
+
+---
+
+## Compliance & Privacy
+
+- No credential scraping; user grants limited scopes (Gmail label, notifications).  
+- Local encryption for tokens; per-source disconnect wipes data.  
+- “Preview before save” Import Inbox.  
+- Panic Hide mode in app.
+
+---
+
+## What’s Included in this Pack
+
+- `sample_gigs.csv` — template + example rows across 16 sources.  
+- `schema.sql` — SQL schema for Postgres/Supabase.  
+- `openapi.yaml` — endpoint definitions.  
+- `parsers/regexMap.ts` — starter regex + mapping stubs.  
+- `notification_patterns.md` — Android notification fields per app.  
+- `share_target_spec.json` — Android/iOS share target intent config.  
+- `env.example` — required environment variables.  
+- `api.http` — sample requests for testing endpoints.  
+
+---
+
+## Getting Started (Dev)
+
+1. Create Supabase project → load `schema.sql`.  
+2. Set env using `env.example`.  
+3. Implement `/normalize` using `parsers/regexMap.ts`.  
+4. Wire `/ingest/*` routes to store raw into `imports`, then call `/normalize`.  
+5. Build Import Inbox screen (mobile) to review and save.  
+6. Connect Map/Routing and Today dashboard.  
+7. Add Wallet summary and CSV/PDF exports.
+
+> Questions? Ping the owner and attach any ambiguous email samples to expand `regexMap` quickly.

@@ -1,0 +1,17 @@
+source,source_job_id,title,address,lat,lng,pay_base,pay_bonus,tip_expected,currency,window_start,window_end,est_minutes,category,requirements,notes
+gigspot,GS-84213,Coffee Shop Audit – Brand A,"123 Main St, Jacksonville, FL 32202",,,12.00,3.00,0,USD,2025-08-12T14:00:00-04:00,2025-08-12T16:00:00-04:00,25,audit,photo;receipt;questionnaire,Endcap photos + receipt
+ivueit,IV-55910,Grocery Endcap Check – Cereal A,"245 Market Ave, Jacksonville, FL 32204",,,8.00,0,0,USD,2025-08-11T10:00:00-04:00,2025-08-11T12:00:00-04:00,20,audit,photo,Due by noon
+observa,OB-22014,Price Verification – Beverage,"44 Bay St, Jacksonville, FL 32202",,,7.50,0,0,USD,2025-08-11T13:00:00-04:00,2025-08-11T15:30:00-04:00,18,audit,photo;price-check,Capture shelf tag
+mobee,MB-10122,Mobile Audit – Candy Aisle,"1010 Atlantic Blvd, Neptune Beach, FL 32266",,,6.00,1.00,0,USD,2025-08-11T09:00:00-04:00,2025-08-11T11:00:00-04:00,15,audit,photo;geo-fence,Geo-fence required
+alt360,A360-3319,Retail Display Reset,"700 Retail Dr, Jacksonville, FL 32216",,,25.00,5.00,0,USD,2025-08-13T08:00:00-04:00,2025-08-13T10:00:00-04:00,60,audit,tools;photo,Bring tape measure
+field_agent,FA-77621,Product Demo Check,"2600 River Rd, Jacksonville, FL 32207",,,10.00,0,0,USD,2025-08-11T12:00:00-04:00,2025-08-11T13:30:00-04:00,25,audit,photo;script,Ask staff 2 questions
+easyshift,ES-99211,Quick Price Scan – Snacks,"12 King St, St. Augustine, FL 32084",,,5.00,0,0,USD,2025-08-11T14:30:00-04:00,2025-08-11T16:00:00-04:00,12,audit,photo,3 items only
+producttube,PT-52515,Record 2-Min Product Video,Home – Remote,,,12.00,0,0,USD,2025-08-11T18:00:00-04:00,2025-08-11T20:00:00-04:00,20,content,video,Upload by 8 PM
+veryable,VY-90011,Picker/Packer – Warehouse A,"1500 Logistics Ln, Jacksonville, FL 32218",,,96.00,0,0,USD,2025-08-12T07:00:00-04:00,2025-08-12T15:00:00-04:00,480,shift,safety-vest,$12/hr × 8h
+instawork,IW-65077,Prep Cook – Hotel Downtown,"1 Riverside Ave, Jacksonville, FL 32202",,,128.00,0,0,USD,2025-08-13T16:00:00-04:00,2025-08-13T24:00:00-04:00,480,shift,food-handler,$16/hr × 8h
+wonolo,WN-22290,Event Staff – Convention,"500 Center Blvd, Jacksonville, FL 32256",,,120.00,20.00,0,USD,2025-08-15T09:00:00-04:00,2025-08-15T17:00:00-04:00,480,shift,black-attire,Parking reimbursed $10
+bluecrew,BC-88341,Warehouse Associate – AM,"212 Port Rd, Jacksonville, FL 32226",,,105.00,0,0,USD,2025-08-14T06:00:00-04:00,2025-08-14T14:00:00-04:00,480,shift,steel-toe;vest,$13.125/hr × 8h
+bestmark,BM-11027,Mystery Shop – Electronics,"Mall at Town Center, Jacksonville, FL",,,20.00,5.00,0,USD,2025-08-16T11:00:00-04:00,2025-08-16T13:00:00-04:00,45,shop,questionnaire;receipt,Interaction notes required
+marketforce,MF-77120,Dine-in Mystery Shop,"123 Bistro Ln, Jacksonville, FL 32205",,,18.00,7.00,3.00,USD,2025-08-17T17:30:00-04:00,2025-08-17T20:30:00-04:00,60,shop,receipt;timings,Reimburse up to $25
+secret_shopper,SS-33421,Bank Inquiry Shop,"100 Finance Way, Jacksonville, FL 32204",,,22.00,0,0,USD,2025-08-18T09:30:00-04:00,2025-08-18T11:30:00-04:00,40,shop,script;audio,Optional call recording
+ipsos,IP-90511,Gas Station Audit,"456 Fuel Rd, Jacksonville, FL 32225",,,14.00,2.00,0,USD,2025-08-12T13:00:00-04:00,2025-08-12T16:00:00-04:00,22,audit,photo;price-check,Exterior + pumps
