@@ -1,12 +1,36 @@
-# GigDash - God-Tier Full-Stack Dashboard
+# GigDash - Ultimate Gig Aggregator Platform
 
-A production-ready, full-stack web application for managing gigs and performances. Built with modern technologies and best practices for scalability, security, and maintainability.
+A production-ready, full-stack gig aggregator platform that brings together opportunities from multiple platforms (DoorDash, Amazon Flex, Mystery Shopping, ShiftSmart, and more) into one unified dashboard. Built with modern technologies and best practices for scalability, security, and maintainability.
 
 ## 🚀 Features
 
+### Job Marketplace & Aggregation
+- **Multi-Platform Integration**: Connect to 12+ gig platforms including DoorDash, Amazon Flex, Instacart, Mystery Shopping, Secret Shop, ivueit, ShiftSmart, TaskRabbit, and more
+- **Unified Job Feed**: Browse all available opportunities in one place with advanced filtering
+- **Smart Filtering**: Filter by category, location, pay rate, effort level, and platform
+- **Application Tracking**: Manage all your job applications across platforms
+
+### Payment Management
+- **Payment Tracking**: Track expected and received payments from each platform
+- **Payment Calendar**: See when payments are due and track payment history
+- **Earnings Dashboard**: View total pending, processing, and paid amounts
+- **Platform-Specific Tracking**: Organize payments by platform and job
+
+### Route Optimization
+- **Smart Route Planning**: Create efficient routes for multiple jobs
+- **Distance & Time Estimates**: Calculate total distance and time for routes
+- **Job Sequencing**: Optimize stop order to maximize efficiency
+- **Route Status Tracking**: Track in-progress and completed routes
+
+### Platform Management
+- **Account Linking**: Connect your accounts from multiple platforms
+- **Status Monitoring**: Track connection status for each platform
+- **Onboarding Support**: Get started with new platforms easily
+
+### Core Features
 - **Authentication System**: Secure JWT-based authentication with bcrypt password hashing
-- **Gig Management**: Full CRUD operations for creating, reading, updating, and deleting gigs
-- **Real-time Filtering**: Filter gigs by status (Upcoming, Completed, Cancelled)
+- **Personal Gig Management**: Track your own scheduled performances and events
+- **Real-time Filtering**: Filter and search across all your gigs and opportunities
 - **Responsive UI**: Beautiful, mobile-friendly interface built with React and TailwindCSS
 - **Type Safety**: Full TypeScript implementation across frontend and backend
 - **Database**: PostgreSQL with Prisma ORM for type-safe database access
@@ -105,7 +129,16 @@ createdb gigdash
 cd backend
 npm run prisma:migrate
 npm run prisma:generate
+npm run prisma:seed
 ```
+
+The seed command will populate the database with 12 popular gig platforms including:
+- DoorDash, Amazon Flex, Uber Eats, Instacart (Delivery)
+- Mystery Shopping, Secret Shop (Mystery Shopping)
+- ivueit, Field Agent (Inventory)
+- ShiftSmart (Shift Work)
+- TaskRabbit, Gigwalk (Task-Based)
+- Merchandiser (Merchandising)
 
 ### 5. Start development servers
 
@@ -237,6 +270,155 @@ Content-Type: application/json
 #### Delete Gig
 ```http
 DELETE /api/gigs/:id
+```
+
+### Job Opportunities Endpoints (Authenticated)
+
+#### Browse Opportunities
+```http
+GET /api/opportunities?category=DELIVERY&location=New York&minPay=15&maxPay=30&effortLevel=MEDIUM&platformId=<uuid>
+```
+
+#### Get Single Opportunity
+```http
+GET /api/opportunities/:id
+```
+
+#### Apply to Opportunity
+```http
+POST /api/opportunities/:id/apply
+Content-Type: application/json
+
+{
+  "notes": "Available immediately"
+}
+```
+
+#### Get My Applications
+```http
+GET /api/opportunities/applications?status=PENDING
+```
+
+#### Update Application
+```http
+PATCH /api/opportunities/applications/:id
+Content-Type: application/json
+
+{
+  "status": "COMPLETED",
+  "notes": "Job completed successfully"
+}
+```
+
+### Platform Endpoints (Authenticated)
+
+#### Get All Platforms
+```http
+GET /api/platforms?category=DELIVERY
+```
+
+#### Get My Connected Platforms
+```http
+GET /api/platforms/my
+```
+
+#### Connect Platform
+```http
+POST /api/platforms/connect
+Content-Type: application/json
+
+{
+  "platformId": "<uuid>",
+  "username": "myusername"
+}
+```
+
+#### Disconnect Platform
+```http
+DELETE /api/platforms/disconnect/:id
+```
+
+### Payment Endpoints (Authenticated)
+
+#### Create Payment Record
+```http
+POST /api/payments
+Content-Type: application/json
+
+{
+  "applicationId": "<uuid>",
+  "amount": 150.00,
+  "expectedDate": "2024-12-31",
+  "paymentMethod": "Direct Deposit"
+}
+```
+
+#### Get My Payments
+```http
+GET /api/payments?status=PENDING&startDate=2024-01-01&endDate=2024-12-31
+```
+
+#### Update Payment Status
+```http
+PATCH /api/payments/:id
+Content-Type: application/json
+
+{
+  "status": "PAID",
+  "paidDate": "2024-12-25"
+}
+```
+
+#### Get Payment Stats
+```http
+GET /api/payments/stats
+```
+
+### Route Endpoints (Authenticated)
+
+#### Create Route
+```http
+POST /api/routes
+Content-Type: application/json
+
+{
+  "name": "Morning Route",
+  "date": "2024-12-25T08:00:00Z",
+  "startLocation": "123 Main St",
+  "stops": [
+    {
+      "opportunityId": "<uuid>",
+      "location": "456 Oak Ave",
+      "estimatedTime": 30
+    }
+  ]
+}
+```
+
+#### Get My Routes
+```http
+GET /api/routes?status=PLANNED&startDate=2024-01-01
+```
+
+#### Optimize Route
+```http
+POST /api/routes/optimize
+Content-Type: application/json
+
+{
+  "opportunityIds": ["<uuid1>", "<uuid2>"],
+  "startLocation": "123 Main St"
+}
+```
+
+#### Complete Route Stop
+```http
+PATCH /api/routes/stops/:stopId/complete
+Content-Type: application/json
+
+{
+  "notes": "Completed successfully"
+}
 ```
 
 ## 🧪 Testing
