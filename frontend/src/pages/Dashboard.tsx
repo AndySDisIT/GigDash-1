@@ -26,7 +26,7 @@ export const Dashboard = () => {
       setGigs(data);
       setError('');
     } catch (err: unknown) {
-      setError(getErrorMessage(err) || 'Failed to fetch gigs');
+      setError(getErrorMessage(err, 'Failed to fetch gigs'));
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export const Dashboard = () => {
       setEditingGig(undefined);
       fetchGigs();
     } catch (err: unknown) {
-      setError(getErrorMessage(err) || 'Operation failed');
+      setError(getErrorMessage(err, 'Operation failed'));
     }
   };
 
@@ -59,7 +59,7 @@ export const Dashboard = () => {
       await gigsApi.delete(id);
       fetchGigs();
     } catch (err: unknown) {
-      setError(getErrorMessage(err) || 'Failed to delete gig');
+      setError(getErrorMessage(err, 'Failed to delete gig'));
     }
   };
 

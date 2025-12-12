@@ -25,7 +25,7 @@ export const Login = () => {
       await login(data.email, data.password);
       navigate('/dashboard');
     } catch (err: unknown) {
-      setError(getErrorMessage(err) || 'Login failed');
+      setError(getErrorMessage(err, 'Login failed'));
     }
   };
 

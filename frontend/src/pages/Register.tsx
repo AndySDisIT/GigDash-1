@@ -30,7 +30,7 @@ export const Register = () => {
       await registerUser(data.email, data.password, data.name);
       navigate('/dashboard');
     } catch (err: unknown) {
-      setError(getErrorMessage(err) || 'Registration failed');
+      setError(getErrorMessage(err, 'Registration failed'));
     }
   };
 
