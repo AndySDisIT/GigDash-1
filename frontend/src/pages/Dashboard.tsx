@@ -24,8 +24,12 @@ export const Dashboard = () => {
       const data = await gigsApi.getAll(filters);
       setGigs(data);
       setError('');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to fetch gigs');
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err 
+          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
+          : undefined;
+      setError(errorMessage || 'Failed to fetch gigs');
     } finally {
       setLoading(false);
     }
@@ -41,8 +45,12 @@ export const Dashboard = () => {
       setShowForm(false);
       setEditingGig(undefined);
       fetchGigs();
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Operation failed');
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err 
+          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
+          : undefined;
+      setError(errorMessage || 'Operation failed');
     }
   };
 
@@ -57,8 +65,12 @@ export const Dashboard = () => {
     try {
       await gigsApi.delete(id);
       fetchGigs();
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to delete gig');
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err 
+          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
+          : undefined;
+      setError(errorMessage || 'Failed to delete gig');
     }
   };
 

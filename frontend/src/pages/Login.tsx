@@ -23,8 +23,12 @@ export const Login = () => {
       setError('');
       await login(data.email, data.password);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed');
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err 
+          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
+          : undefined;
+      setError(errorMessage || 'Login failed');
     }
   };
 

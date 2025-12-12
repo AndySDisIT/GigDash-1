@@ -28,8 +28,12 @@ export const Register = () => {
       setError('');
       await registerUser(data.email, data.password, data.name);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+    } catch (err: unknown) {
+      const errorMessage = 
+        err && typeof err === 'object' && 'response' in err 
+          ? (err as { response?: { data?: { error?: string } } }).response?.data?.error 
+          : undefined;
+      setError(errorMessage || 'Registration failed');
     }
   };
 

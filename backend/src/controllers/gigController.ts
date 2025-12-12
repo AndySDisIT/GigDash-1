@@ -44,19 +44,28 @@ export const getGigs = async (req: AuthRequest, res: Response) => {
     const userId = req.user!.id;
     const { status, startDate, endDate } = req.query;
 
-    const where: any = { userId };
+    interface WhereClause {
+      userId: string;
+      status?: string;
+      date?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    }
 
-    if (status) {
+    const where: WhereClause = { userId };
+
+    if (status && typeof status === 'string') {
       where.status = status;
     }
 
     if (startDate || endDate) {
       where.date = {};
-      if (startDate) {
-        where.date.gte = new Date(startDate as string);
+      if (startDate && typeof startDate === 'string') {
+        where.date.gte = new Date(startDate);
       }
-      if (endDate) {
-        where.date.lte = new Date(endDate as string);
+      if (endDate && typeof endDate === 'string') {
+        where.date.lte = new Date(endDate);
       }
     }
 
