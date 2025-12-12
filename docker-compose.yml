@@ -6,9 +6,9 @@ services:
     container_name: gigdash-db
     restart: always
     environment:
-      POSTGRES_USER: gigdash
-      POSTGRES_PASSWORD: gigdash123
-      POSTGRES_DB: gigdash
+      POSTGRES_USER: ${POSTGRES_USER:-gigdash}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gigdash123}
+      POSTGRES_DB: ${POSTGRES_DB:-gigdash}
     ports:
       - '5432:5432'
     volumes:
@@ -21,12 +21,13 @@ services:
     container_name: gigdash-backend
     restart: always
     environment:
-      NODE_ENV: production
-      PORT: 5000
-      DATABASE_URL: postgresql://gigdash:gigdash123@postgres:5432/gigdash?schema=public
-      JWT_SECRET: your-production-secret-change-this
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${BACKEND_PORT:-5000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-gigdash}:${POSTGRES_PASSWORD:-gigdash123}@postgres:5432/${POSTGRES_DB:-gigdash}?schema=public
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in environment}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
     ports:
-      - '5000:5000'
+      - '${BACKEND_PORT:-5000}:${BACKEND_PORT:-5000}'
     depends_on:
       - postgres
     volumes:

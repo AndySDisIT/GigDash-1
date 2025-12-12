@@ -129,6 +129,17 @@ npm run dev:frontend
 
 ### Full Stack with Docker Compose
 
+1. **Set up environment variables:**
+```bash
+# Copy the example env file
+cp .env.example .env
+
+# Edit .env and set your own values, especially:
+# - JWT_SECRET (generate with: openssl rand -base64 32)
+# - POSTGRES_PASSWORD
+```
+
+2. **Start all services:**
 ```bash
 # Build and start all services
 docker-compose up --build
