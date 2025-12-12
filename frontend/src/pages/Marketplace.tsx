@@ -6,9 +6,11 @@ import { platformsApi } from '../api/platforms';
 import { getErrorMessage } from '../utils/error';
 import { formatDate } from '../utils/date';
 
+import { Platform } from '../types';
+
 export const Marketplace = () => {
   const [opportunities, setOpportunities] = useState<JobOpportunity[]>([]);
-  const [platforms, setPlatforms] = useState<any[]>([]);
+  const [platforms, setPlatforms] = useState<Platform[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   

@@ -39,7 +39,7 @@ export const getOpportunities = async (req: AuthRequest, res: Response) => {
     }
 
     if (location && typeof location === 'string') {
-      where.location = { contains: location, mode: 'insensitive' };
+      where.location = { contains: location, mode: 'insensitive' as any };
     }
 
     if (minPay || maxPay) {
