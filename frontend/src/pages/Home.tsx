@@ -12,9 +12,8 @@ export const Home = () => {
             Welcome to GigDash
           </h1>
           <p className="text-xl text-primary-100 mb-12 max-w-2xl mx-auto">
-            The god-tier full-stack dashboard for managing all your gigs in one
-            place. Track performances, manage venues, and keep your schedule
-            organized.
+            The ultimate gig aggregator platform. Discover opportunities from multiple platforms,
+            manage your applications, track payments, and optimize your routes—all in one place.
           </p>
           <div className="flex justify-center space-x-4">
             {isAuthenticated ? (
@@ -45,26 +44,24 @@ export const Home = () => {
 
         <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg p-6 text-white">
-            <div className="text-4xl mb-4">📅</div>
-            <h3 className="text-xl font-semibold mb-2">Track Your Gigs</h3>
+            <div className="text-4xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold mb-2">Discover Opportunities</h3>
             <p className="text-primary-100">
-              Keep all your upcoming, completed, and cancelled gigs organized in
-              one place.
+              Browse gigs from DoorDash, Amazon Flex, Mystery Shopping, and 10+ more platforms in one place.
             </p>
           </div>
           <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg p-6 text-white">
             <div className="text-4xl mb-4">💰</div>
-            <h3 className="text-xl font-semibold mb-2">Manage Payments</h3>
+            <h3 className="text-xl font-semibold mb-2">Track Payments</h3>
             <p className="text-primary-100">
-              Track your earnings and payment details for each performance.
+              Manage payment schedules from each platform and never miss an expected payment.
             </p>
           </div>
           <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg p-6 text-white">
-            <div className="text-4xl mb-4">📊</div>
-            <h3 className="text-xl font-semibold mb-2">Dashboard View</h3>
+            <div className="text-4xl mb-4">🗺️</div>
+            <h3 className="text-xl font-semibold mb-2">Optimize Routes</h3>
             <p className="text-primary-100">
-              Get a beautiful overview of all your gigs with powerful filtering
-              options.
+              Smart route planning to help you complete more jobs efficiently and maximize earnings.
             </p>
           </div>
         </div>

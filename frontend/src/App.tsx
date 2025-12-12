@@ -5,6 +5,9 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
+import { Marketplace } from './pages/Marketplace';
+import { MyJobs } from './pages/MyJobs';
+import { Platforms } from './pages/Platforms';
 
 function App() {
   const { isAuthenticated, initialize } = useAuth();
@@ -31,6 +34,24 @@ function App() {
           path="/dashboard"
           element={
             isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/marketplace"
+          element={
+            isAuthenticated ? <Marketplace /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/my-jobs"
+          element={
+            isAuthenticated ? <MyJobs /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/platforms"
+          element={
+            isAuthenticated ? <Platforms /> : <Navigate to="/login" />
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

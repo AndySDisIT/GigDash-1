@@ -33,6 +33,24 @@ export const Layout = ({ children }: LayoutProps) => {
                 >
                   Dashboard
                 </Link>
+                <Link
+                  to="/marketplace"
+                  className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Marketplace
+                </Link>
+                <Link
+                  to="/my-jobs"
+                  className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  My Jobs
+                </Link>
+                <Link
+                  to="/platforms"
+                  className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Platforms
+                </Link>
                 <span className="text-gray-600">{user?.name}</span>
                 <button
                   onClick={handleLogout}
