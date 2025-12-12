@@ -8,10 +8,12 @@ import {
   deleteGig,
 } from '../controllers/gigController';
 import { authenticate } from '../middleware/auth';
+import { gigLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
 router.use(authenticate);
+router.use(gigLimiter);
 
 router.post('/', createGigValidation, createGig);
 router.get('/', getGigs);

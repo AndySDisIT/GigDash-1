@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import gigRoutes from './routes/gigRoutes';
 import { errorHandler } from './middleware/errorHandler';
+import { apiLimiter } from './middleware/rateLimiter';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/', apiLimiter);
 
 // Health check
 app.get('/health', (req, res) => {
