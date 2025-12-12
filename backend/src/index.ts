@@ -5,6 +5,10 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import gigRoutes from './routes/gigRoutes';
+import opportunityRoutes from './routes/opportunityRoutes';
+import platformRoutes from './routes/platformRoutes';
+import paymentRoutes from './routes/paymentRoutes';
+import routeRoutes from './routes/routeRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { apiLimiter } from './middleware/rateLimiter';
 
@@ -29,6 +33,10 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/gigs', gigRoutes);
+app.use('/api/opportunities', opportunityRoutes);
+app.use('/api/platforms', platformRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/routes', routeRoutes);
 
 // Error handler
 app.use(errorHandler);

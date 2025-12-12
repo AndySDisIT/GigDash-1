@@ -10,20 +10,23 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  gigs      Gig[]
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  password            String
+  name                String
+  role                Role                 @default(USER)
+  location            String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  gigs                Gig[]
+  platformAccounts    UserPlatformAccount[]
+  jobApplications     JobApplication[]
   
   @@map("users")
 }
 
 model Gig {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String?
   venue       String
@@ -31,13 +34,169 @@ model Gig {
   payment     Float?
   status      GigStatus @default(UPCOMING)
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   
   @@map("gigs")
   @@index([userId])
   @@index([date])
+}
+
+model Platform {
+  id          String               @id @default(uuid())
+  name        String               @unique
+  slug        String               @unique
+  description String?
+  category    PlatformCategory
+  logoUrl     String?
+  signupUrl   String?
+  apiEnabled  Boolean              @default(false)
+  active      Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  accounts    UserPlatformAccount[]
+  opportunities JobOpportunity[]
+  
+  @@map("platforms")
+}
+
+model UserPlatformAccount {
+  id              String   @id @default(uuid())
+  userId          String
+  platformId      String
+  username        String?
+  status          AccountStatus @default(PENDING)
+  connectedAt     DateTime?
+  lastSyncAt      DateTime?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform        Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, platformId])
+  @@map("user_platform_accounts")
+  @@index([userId])
+  @@index([platformId])
+}
+
+model JobOpportunity {
+  id              String          @id @default(uuid())
+  platformId      String
+  externalId      String?
+  title           String
+  description     String?
+  category        JobCategory
+  location        String?
+  city            String?
+  state           String?
+  zipCode         String?
+  payRate         Float?
+  payType         PayType?
+  effortLevel     EffortLevel?
+  duration        String?
+  requirements    String?
+  status          OpportunityStatus @default(AVAILABLE)
+  startDate       DateTime?
+  endDate         DateTime?
+  postedAt        DateTime         @default(now())
+  expiresAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  platform        Platform         @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  applications    JobApplication[]
+  
+  @@unique([platformId, externalId])
+  @@map("job_opportunities")
+  @@index([platformId])
+  @@index([category])
+  @@index([location])
+  @@index([status])
+  @@index([postedAt])
+}
+
+model JobApplication {
+  id              String              @id @default(uuid())
+  userId          String
+  opportunityId   String
+  status          ApplicationStatus   @default(PENDING)
+  appliedAt       DateTime            @default(now())
+  completedAt     DateTime?
+  notes           String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunity     JobOpportunity      @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  payment         Payment?
+  
+  @@unique([userId, opportunityId])
+  @@map("job_applications")
+  @@index([userId])
+  @@index([opportunityId])
+  @@index([status])
+}
+
+model Payment {
+  id              String          @id @default(uuid())
+  applicationId   String          @unique
+  userId          String
+  platformId      String
+  amount          Float
+  status          PaymentStatus   @default(PENDING)
+  expectedDate    DateTime?
+  paidDate        DateTime?
+  paymentMethod   String?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  application     JobApplication  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  
+  @@map("payments")
+  @@index([userId])
+  @@index([platformId])
+  @@index([status])
+  @@index([expectedDate])
+}
+
+model Route {
+  id              String          @id @default(uuid())
+  userId          String
+  name            String
+  date            DateTime
+  startLocation   String?
+  endLocation     String?
+  totalDistance   Float?
+  estimatedTime   Int?
+  status          RouteStatus     @default(PLANNED)
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  stops           RouteStop[]
+  
+  @@map("routes")
+  @@index([userId])
+  @@index([date])
+  @@index([status])
+}
+
+model RouteStop {
+  id              String          @id @default(uuid())
+  routeId         String
+  opportunityId   String
+  order           Int
+  location        String
+  estimatedTime   Int?
+  completed       Boolean         @default(false)
+  completedAt     DateTime?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  route           Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  
+  @@map("route_stops")
+  @@index([routeId])
+  @@index([opportunityId])
 }
 
 enum Role {
@@ -47,6 +206,78 @@ enum Role {
 
 enum GigStatus {
   UPCOMING
+  COMPLETED
+  CANCELLED
+}
+
+enum PlatformCategory {
+  MYSTERY_SHOPPING
+  DELIVERY
+  RIDESHARE
+  MERCHANDISING
+  TASK_BASED
+  INVENTORY
+  OTHER
+}
+
+enum AccountStatus {
+  PENDING
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+enum JobCategory {
+  MYSTERY_SHOP
+  SECRET_SHOP
+  DELIVERY
+  RIDESHARE
+  MERCHANDISING
+  INVENTORY
+  TASK
+  SHIFT
+  OTHER
+}
+
+enum PayType {
+  HOURLY
+  PER_JOB
+  PER_MILE
+  COMMISSION
+  FIXED
+}
+
+enum EffortLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum OpportunityStatus {
+  AVAILABLE
+  CLAIMED
+  EXPIRED
+  COMPLETED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum RouteStatus {
+  PLANNED
+  IN_PROGRESS
   COMPLETED
   CANCELLED
 }
