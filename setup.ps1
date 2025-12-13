@@ -75,9 +75,13 @@ try {
     docker --version | Out-Null
     docker-compose --version | Out-Null
     Write-Host "✓ Docker detected" -ForegroundColor Green
-    $response = Read-Host "Would you like to use Docker for PostgreSQL? (y/n)"
-    if ($response -eq "y" -or $response -eq "Y") {
-        $useDocker = $true
+    if (-not $env:CI -and -not $env:NON_INTERACTIVE) {
+        $response = Read-Host "Would you like to use Docker for PostgreSQL? (y/n)"
+        if ($response -eq "y" -or $response -eq "Y") {
+            $useDocker = $true
+        }
+    } else {
+        Write-Host "Running in non-interactive mode, skipping Docker setup..." -ForegroundColor Yellow
     }
 } catch {
     Write-Host "⚠️  Docker not detected" -ForegroundColor Yellow
