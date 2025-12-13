@@ -75,91 +75,143 @@ A production-ready, full-stack gig aggregator platform that brings together oppo
 
 ## 🚀 Quick Start
 
-### 1. Clone the repository
+### Automated Setup (Recommended)
+
+The easiest way to get started is using our automated setup scripts:
+
+**For Windows (PowerShell):**
+```powershell
+git clone https://github.com/AndySDisIT/GigDash-1.git
+cd GigDash-1
+.\setup.ps1
+```
+
+**For macOS/Linux:**
+```bash
+git clone https://github.com/AndySDisIT/GigDash-1.git
+cd GigDash-1
+chmod +x setup.sh
+./setup.sh
+```
+
+The setup script will:
+- ✅ Install all dependencies
+- ✅ Create environment files
+- ✅ Start PostgreSQL (with Docker if available)
+- ✅ Run database migrations
+- ✅ Seed the database with 12 gig platforms
+- ✅ Verify everything is working
+
+### Manual Setup
+
+If you prefer to set things up manually:
+
+#### 1. Clone and Install
 
 ```bash
 git clone https://github.com/AndySDisIT/GigDash-1.git
 cd GigDash-1
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
 ```
 
-This will install dependencies for both frontend and backend using npm workspaces.
-
-### 3. Set up environment variables
+#### 2. Configure Environment Variables
 
 **Backend:**
 ```bash
-cd backend
-cp .env.example .env
+cp backend/.env.example backend/.env
 ```
 
 Edit `backend/.env` with your configuration:
 ```env
 NODE_ENV=development
 PORT=5000
-DATABASE_URL="postgresql://user:password@localhost:5432/gigdash?schema=public"
-JWT_SECRET=your-super-secret-jwt-key
+DATABASE_URL="postgresql://gigdash:your-password@localhost:5432/gigdash?schema=public"
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=7d
 ```
 
-### 4. Set up the database
+**Important:** 
+- Change `JWT_SECRET` to a secure random string (generate with: `openssl rand -base64 32`)
+- Update `DATABASE_URL` with your PostgreSQL credentials
+
+#### 3. Start Database
 
 **Option A: Using Docker (Recommended)**
 ```bash
-# Start PostgreSQL in Docker
-docker-compose up postgres -d
+# Copy Docker environment file
+cp .env.example .env
 
-# Wait a few seconds for PostgreSQL to initialize, then run from root:
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
+# Start PostgreSQL
+docker-compose up -d postgres
+
+# Wait 5 seconds for initialization
 ```
 
-**Option B: Using local PostgreSQL**
+**Option B: Using Local PostgreSQL**
 ```bash
 # Create database
 createdb gigdash
 
-# Run migrations and seed from root directory:
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
+# Make sure PostgreSQL is running on localhost:5432
 ```
 
-**Note:** You can run Prisma commands from the root directory using `npm run prisma:*` or from the backend directory using `cd backend && npm run prisma:*`.
+#### 4. Initialize Database
 
-The seed command will populate the database with 12 popular gig platforms including:
-- DoorDash, Amazon Flex, Uber Eats, Instacart (Delivery)
-- Mystery Shopping, Secret Shop (Mystery Shopping)
-- ivueit, Field Agent (Inventory)
-- ShiftSmart (Shift Work)
-- TaskRabbit, Gigwalk (Task-Based)
-- Merchandiser (Merchandising)
+Run these commands from the root directory:
 
-### 5. Start development servers
+```bash
+npm run prisma:generate  # Generate Prisma Client
+npm run prisma:migrate   # Run migrations
+npm run prisma:seed      # Seed with gig platforms
+```
 
-From the root directory:
+The seed command populates the database with 12 popular gig platforms:
+- **Delivery:** DoorDash, Amazon Flex, Uber Eats, Instacart
+- **Mystery Shopping:** Mystery Shopping, Secret Shop
+- **Inventory:** ivueit, Field Agent
+- **Shift Work:** ShiftSmart
+- **Task-Based:** TaskRabbit, Gigwalk
+- **Merchandising:** Merchandiser
+
+#### 5. Start Development Servers
+
 ```bash
 npm run dev
 ```
 
-This starts both frontend (http://localhost:3000) and backend (http://localhost:5000) concurrently.
+This starts both servers:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:5000
 
 Or start them separately:
 ```bash
-# Terminal 1 - Backend
-npm run dev:backend
-
-# Terminal 2 - Frontend
-npm run dev:frontend
+npm run dev:backend   # Backend only
+npm run dev:frontend  # Frontend only
 ```
 
 **Note:** All npm scripts work cross-platform (Windows, Mac, Linux) thanks to `cross-env`.
+
+### Verify Your Setup
+
+After setup, verify everything is working correctly:
+
+**Windows:**
+```powershell
+.\verify-setup.ps1
+```
+
+**macOS/Linux:**
+```bash
+./verify-setup.sh
+```
+
+The verification script checks:
+- ✅ Node.js and npm installation
+- ✅ Dependencies are installed
+- ✅ Environment files exist
+- ✅ Database is running
+- ✅ Prisma Client is generated
+- ✅ Migrations are applied
 
 ## 🐳 Docker Deployment
 
@@ -573,13 +625,131 @@ lsof -ti:3000 | xargs kill -9
 ```
 
 ### Prisma Issues
+
+**Error: Environment variable not found: DATABASE_URL**
+
+This means your `.env` file is missing or DATABASE_URL is not set.
+
 ```bash
-# Reset database (WARNING: deletes all data)
+# Create the .env file
+cp backend/.env.example backend/.env
+
+# Edit backend/.env and update DATABASE_URL
+# Example: DATABASE_URL="postgresql://gigdash:password@localhost:5432/gigdash?schema=public"
+```
+
+**Database Connection Issues:**
+
+```bash
+# Test PostgreSQL connection
+psql -h localhost -U gigdash -d gigdash
+
+# If using Docker, check if container is running
+docker ps | grep postgres
+
+# Restart PostgreSQL container
+docker-compose restart postgres
+```
+
+**Reset Database (WARNING: Deletes all data):**
+
+```bash
+# From root directory
+npm run prisma:migrate reset
+
+# Or from backend directory
 cd backend
 npx prisma migrate reset
+```
 
-# Generate Prisma client
+**Regenerate Prisma Client:**
+
+```bash
+# From root directory
 npm run prisma:generate
+```
+
+### Missing npm Scripts
+
+If you get "Missing script" errors for Prisma commands:
+
+```bash
+# Make sure you're on the correct branch
+git checkout copilot/create-god-tier-full-stack
+
+# Pull latest changes
+git pull origin copilot/create-god-tier-full-stack
+
+# Reinstall dependencies
+npm install
+
+# Verify scripts exist
+npm run | grep prisma
+```
+
+### Windows-Specific Issues
+
+**NODE_ENV not recognized:**
+This is already fixed with `cross-env`. If you still see this error, make sure you've pulled the latest changes and run `npm install`.
+
+**Permission Issues:**
+Run PowerShell as Administrator if you encounter permission errors.
+
+**Line Ending Issues:**
+```bash
+# Configure git to handle line endings
+git config --global core.autocrlf true
+```
+
+### Docker Issues
+
+**Port Already in Use:**
+```bash
+# Stop conflicting containers
+docker-compose down
+
+# Or stop specific port
+# Windows PowerShell:
+Stop-Process -Id (Get-NetTCPConnection -LocalPort 5432).OwningProcess -Force
+
+# macOS/Linux:
+lsof -ti:5432 | xargs kill -9
+```
+
+**Docker Compose Issues:**
+```bash
+# Rebuild containers
+docker-compose up --build
+
+# View logs
+docker-compose logs -f postgres
+
+# Clean everything and start fresh
+docker-compose down -v
+docker-compose up -d
+```
+
+### Package Installation Issues
+
+**npm install fails:**
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Delete node_modules and lockfile
+rm -rf node_modules package-lock.json
+rm -rf frontend/node_modules frontend/package-lock.json
+rm -rf backend/node_modules backend/package-lock.json
+
+# Reinstall
+npm install
+```
+
+**Dependency vulnerabilities:**
+The project is configured with secure, up-to-date packages. You can run:
+```bash
+npm audit
+npm audit fix
 ```
 
 ## 🤝 Contributing
