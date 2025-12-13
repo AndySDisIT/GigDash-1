@@ -75,6 +75,7 @@ try {
     docker --version | Out-Null
     docker-compose --version | Out-Null
     Write-Host "✓ Docker detected" -ForegroundColor Green
+    
     if (-not $env:CI -and -not $env:NON_INTERACTIVE) {
         $response = Read-Host "Would you like to use Docker for PostgreSQL? (y/n)"
         if ($response -eq "y" -or $response -eq "Y") {
@@ -86,6 +87,8 @@ try {
 } catch {
     Write-Host "⚠️  Docker not detected" -ForegroundColor Yellow
 }
+
+Write-Host ""
 
 # Step 4: Start database
 if ($useDocker) {
