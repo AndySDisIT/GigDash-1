@@ -54,7 +54,11 @@ if [ ! -f "backend/.env" ]; then
     echo "Current backend/.env contents:"
     cat backend/.env
     echo ""
-    read -p "Press Enter to continue after updating backend/.env, or Ctrl+C to exit and update manually..."
+    if [ -z "$CI" ] && [ -z "$NON_INTERACTIVE" ]; then
+        read -p "Press Enter to continue after updating backend/.env, or Ctrl+C to exit and update manually..."
+    else
+        echo "Running in non-interactive mode, continuing..."
+    fi
 else
     echo -e "${YELLOW}⚠️  backend/.env already exists, skipping...${NC}"
 fi

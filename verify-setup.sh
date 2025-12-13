@@ -52,8 +52,8 @@ if [ -f "backend/.env" ]; then
     
     # Check DATABASE_URL
     if grep -q "DATABASE_URL=" backend/.env; then
-        DB_URL=$(grep "DATABASE_URL=" backend/.env | cut -d'=' -f2 | tr -d '"')
-        if [[ $DB_URL == *"user:password"* ]]; then
+        DB_URL=$(grep "DATABASE_URL=" backend/.env | cut -d'=' -f2- | tr -d '"')
+        if [[ $DB_URL == "postgresql://user:password@localhost"* ]]; then
             echo -e "${YELLOW}  ⚠️  DATABASE_URL still contains example values${NC}"
             WARNINGS=$((WARNINGS + 1))
         fi
@@ -61,8 +61,8 @@ if [ -f "backend/.env" ]; then
     
     # Check JWT_SECRET
     if grep -q "JWT_SECRET=" backend/.env; then
-        JWT=$(grep "JWT_SECRET=" backend/.env | cut -d'=' -f2)
-        if [[ $JWT == *"change"* ]] || [[ $JWT == *"example"* ]]; then
+        JWT=$(grep "JWT_SECRET=" backend/.env | cut -d'=' -f2-)
+        if [[ $JWT == *"change-in-production"* ]] || [[ $JWT == *"change-this"* ]] || [[ $JWT == *"example"* ]]; then
             echo -e "${YELLOW}  ⚠️  JWT_SECRET should be changed for production${NC}"
             WARNINGS=$((WARNINGS + 1))
         fi

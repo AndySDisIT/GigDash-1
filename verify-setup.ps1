@@ -46,20 +46,16 @@ if (Test-Path "backend\.env") {
     
     $envContent = Get-Content "backend\.env" -Raw
     
-    # Check DATABASE_URL
-    if ($envContent -match "DATABASE_URL=") {
-        if ($envContent -match "user:password") {
-            Write-Host "  ⚠️  DATABASE_URL still contains example values" -ForegroundColor Yellow
-            $warnings++
-        }
+    # Check DATABASE_URL with more specific pattern
+    if ($envContent -match 'DATABASE_URL\s*=\s*"?postgresql://user:password@localhost') {
+        Write-Host "  ⚠️  DATABASE_URL still contains example values" -ForegroundColor Yellow
+        $warnings++
     }
     
-    # Check JWT_SECRET
-    if ($envContent -match "JWT_SECRET=") {
-        if ($envContent -match "change" -or $envContent -match "example") {
-            Write-Host "  ⚠️  JWT_SECRET should be changed for production" -ForegroundColor Yellow
-            $warnings++
-        }
+    # Check JWT_SECRET with more specific patterns
+    if ($envContent -match 'JWT_SECRET\s*=\s*.*?(change-in-production|change-this|example)') {
+        Write-Host "  ⚠️  JWT_SECRET should be changed for production" -ForegroundColor Yellow
+        $warnings++
     }
 } else {
     Write-Host "✗ Not found" -ForegroundColor Red

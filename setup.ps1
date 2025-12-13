@@ -59,7 +59,11 @@ if (-not (Test-Path "backend\.env")) {
     Write-Host "  1. DATABASE_URL - Update with your PostgreSQL connection string" -ForegroundColor Yellow
     Write-Host "  2. JWT_SECRET - Change to a secure random string" -ForegroundColor Yellow
     Write-Host ""
-    $continue = Read-Host "Press Enter to continue after updating backend\.env, or Ctrl+C to exit"
+    if (-not $env:CI -and -not $env:NON_INTERACTIVE) {
+        $continue = Read-Host "Press Enter to continue after updating backend\.env, or Ctrl+C to exit"
+    } else {
+        Write-Host "Running in non-interactive mode, continuing..." -ForegroundColor Yellow
+    }
 } else {
     Write-Host "⚠️  backend\.env already exists, skipping..." -ForegroundColor Yellow
 }
