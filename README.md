@@ -114,10 +114,10 @@ JWT_EXPIRES_IN=7d
 # Start PostgreSQL in Docker
 docker-compose up postgres -d
 
-# Wait a few seconds for PostgreSQL to initialize, then:
-cd backend
-npm run prisma:migrate
+# Wait a few seconds for PostgreSQL to initialize, then run from root:
 npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
 ```
 
 **Option B: Using local PostgreSQL**
@@ -125,12 +125,13 @@ npm run prisma:generate
 # Create database
 createdb gigdash
 
-# Run migrations
-cd backend
-npm run prisma:migrate
+# Run migrations and seed from root directory:
 npm run prisma:generate
+npm run prisma:migrate
 npm run prisma:seed
 ```
+
+**Note:** You can run Prisma commands from the root directory using `npm run prisma:*` or from the backend directory using `cd backend && npm run prisma:*`.
 
 The seed command will populate the database with 12 popular gig platforms including:
 - DoorDash, Amazon Flex, Uber Eats, Instacart (Delivery)
@@ -447,8 +448,12 @@ npm run lint             # Lint both projects
 npm run format           # Format code with Prettier
 npm run docker:up        # Start Docker services
 npm run docker:down      # Stop Docker services
+npm run prisma:generate  # Generate Prisma client
+npm run prisma:migrate   # Run database migrations
+npm run prisma:seed      # Seed database with platforms
+npm run prisma:studio    # Open Prisma Studio
 
-# Backend specific
+# Backend specific (if you prefer working in backend directory)
 cd backend
 npm run dev              # Start dev server with hot reload
 npm run build            # Build TypeScript
@@ -457,6 +462,7 @@ npm run test             # Run tests
 npm run lint             # Lint code
 npm run prisma:generate  # Generate Prisma client
 npm run prisma:migrate   # Run database migrations
+npm run prisma:seed      # Seed database with platforms
 npm run prisma:studio    # Open Prisma Studio
 
 # Frontend specific
