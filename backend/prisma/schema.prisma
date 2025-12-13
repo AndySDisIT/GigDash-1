@@ -16,6 +16,12 @@ model User {
   name                String
   role                Role                 @default(USER)
   location            String?
+  equipment           String[]             @default([])
+  certifications      String[]             @default([])
+  willingToTravel     Int                  @default(10)
+  incomeGoal          String?
+  transportation      String?
+  onboardingCompleted Boolean              @default(false)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   gigs                Gig[]
