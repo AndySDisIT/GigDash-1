@@ -217,6 +217,7 @@ enum PlatformCategory {
   MERCHANDISING
   TASK_BASED
   INVENTORY
+  SHIFT
   OTHER
 }
 
