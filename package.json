@@ -1,0 +1,39 @@
+{
+  "name": "gigdash",
+  "version": "1.0.0",
+  "description": "God-tier full-stack dashboard for managing gigs",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "prisma:generate": "npm run prisma:generate --workspace=backend",
+    "prisma:migrate": "npm run prisma:migrate --workspace=backend",
+    "prisma:seed": "npm run prisma:seed --workspace=backend",
+    "prisma:studio": "npm run prisma:studio --workspace=backend",
+    "setup": "node -e \"console.log('Please run the setup script for your platform:\\n  Windows: .\\\\setup.ps1\\n  macOS/Linux: ./setup.sh')\"",
+    "verify": "node -e \"console.log('Please run the verification script for your platform:\\n  Windows: .\\\\verify-setup.ps1\\n  macOS/Linux: ./verify-setup.sh')\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}
