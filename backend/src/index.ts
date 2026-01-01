@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import compression from 'compression';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import gigRoutes from './routes/gigRoutes';
@@ -9,6 +10,7 @@ import opportunityRoutes from './routes/opportunityRoutes';
 import platformRoutes from './routes/platformRoutes';
 import paymentRoutes from './routes/paymentRoutes';
 import routeRoutes from './routes/routeRoutes';
+import healthRoutes from './routes/healthRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { apiLimiter } from './middleware/rateLimiter';
 
@@ -21,14 +23,14 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
+app.use(compression()); // Add compression for responses
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/', apiLimiter);
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+// Health check routes
+app.use('/health', healthRoutes);
+app.use('/api/health', healthRoutes);
 
 // Routes
 app.use('/api/auth', authRoutes);
