@@ -198,6 +198,18 @@ export function RouteOptions({ destinationLat, destinationLng, onModeSelected }:
           </Alert>
         )}
 
+        {userLocation && !routes && (
+          <Alert className="mb-4 border-blue-200 bg-blue-50">
+            <MapPin className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              <div className="font-medium">Current Location</div>
+              <div className="text-sm mt-1">
+                Lat: {userLocation.lat.toFixed(6)}, Lng: {userLocation.lng.toFixed(6)}
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {routes && (
           <Tabs value={viewTab} onValueChange={(v) => setViewTab(v as 'map' | 'list')} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-4">
